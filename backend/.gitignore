@@ -14,3 +14,4 @@ __pycache__/
 .env
 
 README.md
+app/database/database.py
