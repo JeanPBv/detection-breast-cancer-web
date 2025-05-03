@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { obtenerPacientes } from "./pacienteApi";
 import "./PacienteForm.css";
 import { useNavigate } from "react-router-dom";
-import { FaPlus, FaEdit, FaChevronLeft, FaChevronRight} from "react-icons/fa";
+import { FaPlus, FaEdit, FaChevronLeft, FaChevronRight, FaUpload} from "react-icons/fa";
 
 
 function PacienteLista() {
@@ -54,6 +54,9 @@ function PacienteLista() {
               <td className="centrado">
                 <span title="Editar" onClick={() => navigate(`/pacientes/editar/${p.id}`)}>
                   <FaEdit style={{ cursor: "pointer" }} />
+                </span>
+                <span title="Subir Imágenes" onClick={() => navigate(`/pacientes/diagnostico/${p.id}`)}>
+                  <FaUpload style={{ cursor: 'pointer' }} />
                 </span>
               </td>
             </tr>
