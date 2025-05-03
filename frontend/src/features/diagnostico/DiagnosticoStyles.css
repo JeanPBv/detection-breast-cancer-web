@@ -1,0 +1,142 @@
+    .diagnostico-container {
+        display: flex;
+        gap: 2rem;
+        padding: 2rem;
+        color: white;
+        align-items: flex-start;
+        width: 100%;
+    }
+    
+
+    .left-panel, .right-panel {
+        flex: 1;
+    }
+    
+    .upload-area {
+        border: 2px dashed gray;
+        height: 300px;
+        width: 100%;
+        background-color: #1f2937;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-bottom: 1rem;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    
+    .hidden-input {
+        display: none;
+    }
+    
+    .selected-image-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    
+    .image-preview-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 1rem;         
+        padding-top: 0.5rem;      
+        border-top: 2px solid #444;
+    }
+    
+    .image-preview {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+    
+    .button-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .preview-label {
+        margin-top: 0.5rem;
+        font-weight: bold;
+    }
+    
+    .clear-button,
+    .send-button {
+        width: 100%;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 6px;
+        color: white;
+    }
+    
+    
+    .clear-button {
+        background-color: #ef4444;
+    }
+    
+    .send-button {
+        background-color: #6d5dfc;
+    }
+    
+    .send-button:hover {
+        background-color: #594dd6;
+    }
+
+    .clear-button:hover {
+        background-color: #c74141;
+    }
+
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+    }
+    
+    .modal {
+        background-color: #1f2937;
+        padding: 2rem;
+        border-radius: 8px;
+        color: white;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    
+    .modal button {
+        margin-top: 1rem;
+        padding: 0.5rem 1.5rem;
+        background-color: #6d5dfc;
+        border: none;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    
+    .modal button:hover {
+        background-color: #594dd6;
+    }
+    
+    .modal-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-top: 0rem;
+        margin-bottom: 1rem;
+    }
+    
+    .modal-message {
+    font-size:1rem;
+    }
