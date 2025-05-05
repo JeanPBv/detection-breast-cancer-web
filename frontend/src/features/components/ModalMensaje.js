@@ -13,7 +13,7 @@ const ModalMensaje = ({ show, type, title, message, onClose, onConfirm }) => {
           <button onClick={onClose} style={{ backgroundColor: '#ef4444' }}>Cerrar</button>
         )}
 
-        {type === "confirm" && (
+        {(type === "confirm" || type === "confirm-guardar" || type === "confirm-eliminar") && (
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem' }}>
             <button onClick={onClose} style={{ backgroundColor: '#ef4444' }}>Cancelar</button>
             <button onClick={onConfirm} style={{ backgroundColor: '#6d5dfc' }}>Aceptar</button>

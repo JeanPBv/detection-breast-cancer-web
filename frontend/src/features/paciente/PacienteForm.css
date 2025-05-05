@@ -35,7 +35,7 @@ label {
   margin-bottom: 4px;
 }
 
-input, select {
+input, select, textarea {
   padding: 0.6rem;
   border-radius: 6px;
   border: none;
@@ -74,12 +74,14 @@ button:hover {
 }
 
 .tabla-container {
-  padding: 0rem 2rem;
-  color: #fff;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  color: white;
 }
 
 .tabla-pacientes {
-  width: 90vw;
+  width: 100%;
   border-collapse: collapse;
   background-color: #1f1f2e;
   color: white;
