@@ -3,7 +3,7 @@ import { obtenerPacientes } from "./pacienteApi";
 import "./PacienteForm.css";
 import { useNavigate } from "react-router-dom";
 import { FaPlus, FaEdit, FaChevronLeft, FaChevronRight, FaUpload} from "react-icons/fa";
-
+import NavBar from "../components/NavBar";
 
 function PacienteLista() {
   const [pacientes, setPacientes] = useState([]);
@@ -24,57 +24,61 @@ function PacienteLista() {
   }, [pagina]);
 
   return (
-    <div className="tabla-container">
-      <div className="tabla-header">
-        <h2>Pacientes registrados:</h2>
-        <button className="btn-registrar" onClick={() => navigate("/pacientes")}>
-          <FaPlus /> Registrar paciente
-        </button>
-      </div>
+    <>
+      <NavBar />
+      <div className="tabla-container">
+        <div className="tabla-header">
+          <h2>Pacientes registrados:</h2>
+          <button className="btn-registrar" onClick={() => navigate("/pacientes")}>
+            <FaPlus /> Registrar paciente
+          </button>
+        </div>
 
-      <table className="tabla-pacientes">
-        <thead>
-          <tr>
-            <th >Nombre</th>
-            <th>Apellido</th>
-            <th className="centrado">DNI</th>
-            <th className="centrado">Edad</th>
-            <th>Sexo</th>
-            <th className="centrado">Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pacientes.map((p) => (
-            <tr key={p.id}>
-              <td>{p.nombre}</td>
-              <td>{p.apellido}</td>
-              <td className="centrado">{p.dni}</td>
-              <td className="centrado">{p.edad}</td>
-              <td>{p.sexo === "F" ? "Femenino" : "Masculino"}</td>
-              <td className="centrado">
-                <span title="Editar" onClick={() => navigate(`/pacientes/editar/${p.id}`)}>
-                  <FaEdit style={{ cursor: "pointer" }} />
-                </span>
-                <span title="Subir Imágenes" onClick={() => navigate(`/pacientes/diagnostico/${p.id}`)}>
-                  <FaUpload style={{ cursor: 'pointer' }} />
-                </span>
-              </td>
+        <table className="tabla-pacientes">
+          <thead>
+            <tr>
+              <th >Nombre</th>
+              <th>Apellido</th>
+              <th className="centrado">DNI</th>
+              <th className="centrado">Edad</th>
+              <th>Sexo</th>
+              <th className="centrado">Acción</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="paginacion">
-        <button onClick={() => setPagina(p => Math.max(p - 1, 1))}>
-          <FaChevronLeft />
-        </button>
-        <span className="pagina-label">Página {pagina}</span>
-        <button onClick={() => setPagina(p => p + 1)} disabled={pacientes.length < limite}
-          title={pacientes.length < limite ? "Fin de resultados" : ""}>
-          <FaChevronRight />
-        </button>
-      </div>
+          </thead>
+          <tbody>
+            {pacientes.map((p) => (
+              <tr key={p.id}>
+                <td>{p.nombre}</td>
+                <td>{p.apellido}</td>
+                <td className="centrado">{p.dni}</td>
+                <td className="centrado">{p.edad}</td>
+                <td>{p.sexo === "F" ? "Femenino" : "Masculino"}</td>
+                <td className="centrado">
+                  <span title="Editar" onClick={() => navigate(`/pacientes/editar/${p.id}`)}>
+                    <FaEdit style={{ cursor: "pointer" }} />
+                  </span>
+                  <span title="Subir Imágenes" onClick={() => navigate(`/pacientes/diagnostico/${p.id}`)}>
+                    <FaUpload style={{ cursor: 'pointer' }} />
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="paginacion">
+          <button onClick={() => setPagina(p => Math.max(p - 1, 1))}>
+            <FaChevronLeft />
+          </button>
+          <span className="pagina-label">Página {pagina}</span>
+          <button onClick={() => setPagina(p => p + 1)} disabled={pacientes.length < limite}
+            title={pacientes.length < limite ? "Fin de resultados" : ""}>
+            <FaChevronRight />
+          </button>
+        </div>
 
-    </div>
+      </div>
+    </>
+
   );
 }
 

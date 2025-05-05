@@ -1,8 +1,10 @@
-import React, { useState,  useEffect } from 'react';
+import React, { useState,  useEffect} from 'react';
 import './DiagnosticoStyles.css';
 import UploadImages from '../components/UploadImages';
 import ModalMensaje from '../components/ModalMensaje';
 import DataAugmentationPanel from '../components/DataAugmentationPanel';
+import DiagnosticResult from '../components/DiagnosticResult';
+import { useParams } from 'react-router-dom';
 
 const NewDiagnostico = () => {
   const [images, setImages] = useState([]);
@@ -19,7 +21,9 @@ const NewDiagnostico = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
-
+  const { id: pacienteId } = useParams();
+  const [resultadoActual, setResultadoActual] = useState(null);
+  const [diagnosticoId, setDiagnosticoId] = useState('');
   const clearImages = () => {
     images.forEach(img => URL.revokeObjectURL(img.preview));
     setImages([]);
@@ -50,10 +54,21 @@ const NewDiagnostico = () => {
         title={modalTitle}
         message={modalMessage}
         onClose={() => setShowModal(false)}
-        onConfirm={clearImages}
+        onConfirm={() => {
+          if (modalType === 'confirm') {
+            clearImages();
+          } else if (modalType === 'confirm-guardar') {
+            document.dispatchEvent(new CustomEvent("confirmar-guardar"));
+            setShowModal(false);
+          } else if (modalType === 'confirm-eliminar') {
+            document.dispatchEvent(new CustomEvent("confirmar-eliminar"));
+            setShowModal(false);
+          }
+        }}
       />
 
       <UploadImages
+        pacienteId={pacienteId} 
         images={images}
         setImages={setImages}
         selectedImage={selectedImage}
@@ -74,6 +89,8 @@ const NewDiagnostico = () => {
         setDragging={setDragging}
         startPos={startPos}
         setStartPos={setStartPos}
+        setResultadoActual={setResultadoActual}
+        setDiagnosticoId = {setDiagnosticoId}
       />
 
 
@@ -88,6 +105,16 @@ const NewDiagnostico = () => {
           contrast={contrast}
           setContrast={setContrast}
         />
+        <br/>
+        <DiagnosticResult 
+        resultadoActual={resultadoActual}
+        diagnosticoId = {diagnosticoId} 
+        pacienteId={pacienteId} 
+        images={images}
+        setShowModal={setShowModal}
+        setModalTitle={setModalTitle}
+        setModalMessage={setModalMessage}
+        setModalType={setModalType}/>
       </div>
     </div>
   );

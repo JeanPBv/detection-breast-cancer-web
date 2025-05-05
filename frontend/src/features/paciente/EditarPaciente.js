@@ -10,14 +10,6 @@ function EditarPaciente() {
     const [formData, setFormData] = useState({ nombre: "", apellido: "", dni: "", edad: "", sexo: "" });
     const [mensaje] = useState("");
 
-    useEffect(() => {
-        const fetchData = async () => {
-        const data = await obtenerPacientePorId(id);
-        setFormData(data);
-        };
-        fetchData();
-    }, [id]);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
