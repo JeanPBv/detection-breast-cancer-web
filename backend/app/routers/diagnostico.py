@@ -1,12 +1,13 @@
+import os
+import uuid
 from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database.database import SessionLocal
 from app.database import models
 from datetime import datetime
-import os
-import uuid
 from PIL import Image, ImageEnhance
 from app.services.model_predictor import predictor
+from app.services.chatgpt_service import interpretation_openIA
 from app.utils.file_handler import save_upload_file
 
 router = APIRouter(prefix="/diagnosticos", tags=["Diagnóstico"])
@@ -71,9 +72,9 @@ async def analizar_imagen(original_image: UploadFile = File(...), zoom: int = Fo
     temp_aug_path = os.path.join("app/images/temporal", f"temp_aug_{uuid.uuid4().hex}.jpg")
     try:
         img.save(temp_aug_path)
-        print(f"✅ Imagen guardada correctamente en: {temp_aug_path}")
+        print(f"Imagen guardada correctamente en: {temp_aug_path}")
     except Exception as e:
-        print(f"❌ Error al guardar la imagen: {e}")
+        print(f"Error al guardar la imagen: {e}")
 
     resultado_dict = predictor.predict(temp_aug_path)
     # os.remove(temp_aug_path)
@@ -105,6 +106,20 @@ async def guardar_diagnostico_final(diagnostico_id: int = Form(...), descripcion
     if diagnostico.resultado:
         raise HTTPException(status_code=400, detail="Este diagnóstico ya tiene un resultado registrado")
 
+    try:
+        partes = [float(x.strip()) for x in resultado.split("-")]
+        if len(partes) != 3:
+            raise ValueError("El resultado no tiene 3 valores")
+        benigno, ductal, lobulillar = partes
+    except Exception:
+        raise HTTPException(status_code=400, detail="Formato de resultado inválido")
+    
+    interpretation = interpretation_openIA({
+        "Benigno": benigno,
+        "Carcinoma ductal": ductal,
+        "Carcinoma lobulillar": lobulillar
+    })
+
     diagnostico.descripcion = descripcion
     diagnostico.resultado = resultado
     diagnostico.fecha_diagnostico = datetime.utcnow()
@@ -115,7 +130,8 @@ async def guardar_diagnostico_final(diagnostico_id: int = Form(...), descripcion
     return {
         "diagnostico_id": diagnostico.id,
         "resultado": resultado,
-        "descripcion": descripcion
+        "descripcion": descripcion,
+        "interpretacion": interpretation
     }
 
 @router.delete("/eliminar/{diagnostico_id}")
