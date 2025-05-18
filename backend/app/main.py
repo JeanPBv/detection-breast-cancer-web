@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 from app.routers import paciente, diagnostico 
 
+load_dotenv()
 app = FastAPI()
 
 app.add_middleware(
