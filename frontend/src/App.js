@@ -6,6 +6,7 @@ import PacienteForm from "./features/paciente/PacienteForm";
 import PacienteLista from "./features/paciente/PacienteLista";
 import EditarPaciente from "./features/paciente/EditarPaciente";
 import NewDiagnostico from "./features/diagnostico/NewDiagnostico";
+import ListaDiagnosticos from "./features/diagnostico/ListaDiagnosticos";
 import Home from "./features/Home";
 
 function AppWrapper() {
@@ -27,6 +28,7 @@ function AppWrapper() {
             <Route path="/pacientes" element={<PacienteForm />} />
             <Route path="/pacientes/lista" element={<PacienteLista />} />
             <Route path="/pacientes/editar/:id" element={<EditarPaciente />} />
+            <Route path="/diagnosticos/lista" element={<ListaDiagnosticos/>}/>
           </Routes>
         </div>
       )}

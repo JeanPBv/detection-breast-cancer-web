@@ -36,3 +36,22 @@ export const eliminarDiagnostico = async (id) => {
     throw new Error("Error al eliminar el diagnóstico");
   }
 };
+
+export const listarDiagnosticos = async (page = 1, limit = 10) => {
+  const skip = (page - 1) * limit;
+  try {
+    const response = await axios.get(`${API_URL}/listar?skip=${skip}&limit=${limit}`);
+    return response.data;
+  } catch (error) {
+    throw new Error("Error al listar diagnósticos");
+  }
+};
+
+export const obtenerImagenesDiagnostico = async (diagnosticoId) => {
+  try {
+    const response = await axios.get(`${API_URL}/imagenes/${diagnosticoId}`);
+    return response.data;
+  } catch (error) {
+    throw new Error("Error al obtener imágenes del diagnóstico");
+}
+};

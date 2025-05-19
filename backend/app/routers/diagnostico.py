@@ -7,7 +7,7 @@ from app.database import models
 from datetime import datetime
 from PIL import Image, ImageEnhance
 from app.services.model_predictor import predictor
-from app.services.chatgpt_service import interpretation_openIA
+# from app.services.chatgpt_service import interpretation_openIA
 from app.utils.file_handler import save_upload_file
 
 router = APIRouter(prefix="/diagnosticos", tags=["Diagnóstico"])
@@ -114,11 +114,11 @@ async def guardar_diagnostico_final(diagnostico_id: int = Form(...), descripcion
     except Exception:
         raise HTTPException(status_code=400, detail="Formato de resultado inválido")
     
-    interpretation = interpretation_openIA({
-        "Benigno": benigno,
-        "Carcinoma ductal": ductal,
-        "Carcinoma lobulillar": lobulillar
-    })
+    # interpretation = interpretation_openIA({
+    #     "Benigno": benigno,
+    #     "Carcinoma ductal": ductal,
+    #     "Carcinoma lobulillar": lobulillar
+    # })
 
     diagnostico.descripcion = descripcion
     diagnostico.resultado = resultado
@@ -131,7 +131,7 @@ async def guardar_diagnostico_final(diagnostico_id: int = Form(...), descripcion
         "diagnostico_id": diagnostico.id,
         "resultado": resultado,
         "descripcion": descripcion,
-        "interpretacion": interpretation
+        # "interpretacion": interpretation
     }
 
 @router.delete("/eliminar/{diagnostico_id}")
@@ -154,3 +154,34 @@ def eliminar_diagnostico(diagnostico_id: int, db: Session = Depends(get_db)):
     db.commit()
 
     return {"mensaje": "Diagnóstico e imágenes asociadas eliminadas correctamente"}
+
+@router.get("/listar")
+def listar_diagnosticos(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    diagnosticos = db.query(models.Diagnostico).filter(models.Diagnostico.resultado != None).order_by(models.Diagnostico.fecha_diagnostico.desc())\
+        .offset(skip).limit(limit).all()
+
+    listDiagnostic = []
+    for diagnostic in diagnosticos:
+        paciente = db.query(models.Paciente).filter(models.Paciente.id == diagnostic.paciente_id).first()
+        imagenes_count = db.query(models.Imagen).filter(models.Imagen.diagnostico_id == diagnostic.id).count()
+
+        listDiagnostic.append({
+            "id": diagnostic.id,
+            "paciente": f"{paciente.nombre} {paciente.apellido}" if paciente else "Paciente no encontrado",
+            "resultado": diagnostic.resultado,
+            "descripcion": diagnostic.descripcion,
+            "fecha_diagnostico": diagnostic.fecha_diagnostico.strftime("%Y-%m-%d %H:%M"),
+            "cantidad_imagenes": imagenes_count
+        })
+
+    return listDiagnostic
+
+@router.get("/imagenes/{diagnostico_id}")
+def obtener_imagenes(diagnostico_id: int, db: Session = Depends(get_db)):
+    imagenes = db.query(models.Imagen).filter(models.Imagen.diagnostico_id == diagnostico_id).all()
+    rutas = []
+    for img in imagenes:
+        filename = os.path.basename(img.ruta_archivo)
+        rutas.append(f"/images/{filename}")
+    print("Rutas generadas:", rutas)
+    return rutas
