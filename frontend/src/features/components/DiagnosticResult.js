@@ -107,7 +107,7 @@ const DiagnosticResult = ({
         try {
             await guardarDiagnostico(formData);
             toast.success("Diagnóstico registrado correctamente");
-            setTimeout(() => navigate("/pacientes/lista"), 1000);
+            setTimeout(() => navigate("/diagnosticos/lista"), 1000);
         } catch (error) {
             toast.error("Error al guardar el diagnóstico");
         }
@@ -118,7 +118,7 @@ const DiagnosticResult = ({
         try {
             await eliminarDiagnostico(diagnosticoId);
             toast.success("Diagnóstico eliminado correctamente");
-            navigate("/diagnosticos/lista");
+            navigate("/pacientes/lista");
         } catch (error) {
             toast.error("Error al eliminar el diagnóstico");
             console.error(error);
