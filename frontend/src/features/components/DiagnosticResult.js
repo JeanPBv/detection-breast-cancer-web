@@ -34,7 +34,7 @@ const DiagnosticResult = ({
 
     useEffect(() => {
         if (resultadoActual) {
-          setResultadosParciales((prev) => [...prev, resultadoActual]);
+            setResultadosParciales((prev) => [...prev, resultadoActual]);
         }
     }, [resultadoActual]);
 
@@ -49,23 +49,23 @@ const DiagnosticResult = ({
     
     useEffect(() => {
         const handleConfirmarGuardar = () => {
-          handleGuardar();
+            handleGuardar();
         };
-      
+        
         document.addEventListener("confirmar-guardar", handleConfirmarGuardar);
         return () => {
-          document.removeEventListener("confirmar-guardar", handleConfirmarGuardar);
+            document.removeEventListener("confirmar-guardar", handleConfirmarGuardar);
         };
     }, [descripcion, resultadoPromedio]);
 
     useEffect(() => {
         const handleConfirmarEliminar = () => {
-          handleEliminar();
+            handleEliminar();
         };
-      
+        
         document.addEventListener("confirmar-eliminar", handleConfirmarEliminar);
         return () => {
-          document.removeEventListener("confirmar-eliminar", handleConfirmarEliminar);
+            document.removeEventListener("confirmar-eliminar", handleConfirmarEliminar);
         };
     }, [diagnosticoId]);
 
@@ -74,10 +74,10 @@ const DiagnosticResult = ({
     const modalGuardar = () => {
         const faltantes = images.filter(img => !img.analizada);
         if (faltantes.length > 0) {
-          setModalTitle('⚠️¿Estás seguro?⚠️');
-          setModalMessage(`Falta${faltantes.length > 1 ? 'n' : ''} ${faltantes.length} imagen${faltantes.length > 1 ? 'es' : ''} por analizar. ¿Deseas continuar de todos modos?`);
-          setModalType('confirm-guardar');
-          setShowModal(true);
+            setModalTitle('⚠️¿Estás seguro?⚠️');
+            setModalMessage(`Falta${faltantes.length > 1 ? 'n' : ''} ${faltantes.length} imagen${faltantes.length > 1 ? 'es' : ''} por analizar. ¿Deseas continuar de todos modos?`);
+            setModalType('confirm-guardar');
+            setShowModal(true);
         } else {
             handleGuardar();
         }
@@ -88,7 +88,7 @@ const DiagnosticResult = ({
         setModalMessage('Al eliminar el diagnóstico se perderá toda la información de las imágenes ya procesadas.\n\n¿Estás seguro que deseas continuar?');
         setModalType('confirm-eliminar');
         setShowModal(true);
-      };
+        };
 
     const handleGuardar = async () => {
         if (!descripcion.trim()) return;
@@ -112,16 +112,16 @@ const DiagnosticResult = ({
             toast.error("Error al guardar el diagnóstico");
         }
     };
-      
+    
 
     const handleEliminar = async () => {
         try {
-          await eliminarDiagnostico(diagnosticoId);
-          toast.success("Diagnóstico eliminado correctamente");
-          navigate("/pacientes/lista");
+            await eliminarDiagnostico(diagnosticoId);
+            toast.success("Diagnóstico eliminado correctamente");
+            navigate("/diagnosticos/lista");
         } catch (error) {
-          toast.error("Error al eliminar el diagnóstico");
-          console.error(error);
+            toast.error("Error al eliminar el diagnóstico");
+            console.error(error);
         }
     };
 

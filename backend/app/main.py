@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 from app.routers import paciente, diagnostico 
+from fastapi.staticfiles import StaticFiles
 
-load_dotenv()
 app = FastAPI()
+app.mount("/images", StaticFiles(directory="app/images"), name="images")
 
 app.add_middleware(
     CORSMiddleware,
