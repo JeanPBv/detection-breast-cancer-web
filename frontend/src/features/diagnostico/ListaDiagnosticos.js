@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { listarDiagnosticos, obtenerImagenesDiagnostico } from "./diagnosticoApi";
-import {FaChevronLeft, FaChevronRight, FaEye} from "react-icons/fa";
+import { listarDiagnosticos, obtenerImagenesDiagnostico, descargarDiagnosticoPdf } from "./diagnosticoApi";
+import {FaChevronLeft, FaChevronRight, FaEye, FaDownload} from "react-icons/fa";
 import NavBar from "../components/NavBar";
 
 const ListaDiagnosticos = () => {
@@ -52,7 +52,7 @@ const ListaDiagnosticos = () => {
                         <th style={{ width: "20%" }}>Resultado</th>
                         <th style={{ width: "30%" }}>Descripción</th>
                         <th style={{ width: "15%" }} className="centrado">Fecha</th>
-                        <th style={{ width: "10%" }} className="centrado">Imágenes</th>
+                        <th style={{ width: "10%" }} className="centrado">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -78,6 +78,12 @@ const ListaDiagnosticos = () => {
                                     console.error(error.message);
                                 }
                                 }}
+                            />
+                            <FaDownload
+                                className="icono-descarga"
+                                style={{ cursor: "pointer", fontSize: "1.2rem" }}
+                                title="Exportar PDF"
+                                onClick={() => descargarDiagnosticoPdf(diagnostic.id)}
                             />
                         </td>
                     </tr>

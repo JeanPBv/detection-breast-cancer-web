@@ -348,12 +348,13 @@
         font-weight: bold;
     }
 
-    .icono-ojo {
+    .icono-ojo, .icono-descarga {
         color: #9db4ff;
         transition: transform 0.2s ease;
+        margin-right: 1rem;
     }
     
-    .icono-ojo:hover {
+    .icono-ojo:hover, .icono-descarga:hover {
         transform: scale(1.2);
         color:#ffffff;
     }
