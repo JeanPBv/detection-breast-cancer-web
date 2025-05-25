@@ -8,7 +8,7 @@ from app.database import models
 from datetime import datetime
 from PIL import Image, ImageEnhance
 from app.services.model_predictor import predictor
-# from app.services.chatgpt_service import interpretation_openIA
+from app.services.deepseek_service import interpretation_deepseek
 from app.utils.file_handler import save_upload_file
 from fastapi.responses import FileResponse
 from app.utils.pdf_generator import PDF
@@ -121,12 +121,12 @@ async def guardar_diagnostico_final(diagnostico_id: int = Form(...), descripcion
     except Exception:
         raise HTTPException(status_code=400, detail="Formato de resultado inválido")
     
-    # interpretation = interpretation_openIA({
-    #     "Benigno": benigno,
-    #     "Carcinoma ductal": ductal,
-    #     "Carcinoma lobulillar": lobulillar
-    # })
-
+    interpretation = interpretation_deepseek({
+        "Benigno": benigno,
+        "Carcinoma ductal": ductal,
+        "Carcinoma lobulillar": lobulillar
+    })
+    
     diagnostico.descripcion = descripcion
     diagnostico.resultado = resultado
     diagnostico.fecha_diagnostico = datetime.now(peru_tz)
@@ -138,7 +138,7 @@ async def guardar_diagnostico_final(diagnostico_id: int = Form(...), descripcion
         "diagnostico_id": diagnostico.id,
         "resultado": resultado,
         "descripcion": descripcion,
-        # "interpretacion": interpretation
+        "interpretacion": interpretation
     }
 
 @router.delete("/eliminar/{diagnostico_id}")

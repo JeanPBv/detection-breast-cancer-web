@@ -19,6 +19,8 @@ const DiagnosticResult = ({
     const [resultadosParciales, setResultadosParciales] = useState([]);
     const navigate = useNavigate();
     const resultadoPromedio = {};
+    const [interpretacionIA, setInterpretacionIA] = useState("");
+    const [mostrarModalIA, setMostrarModalIA] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -105,9 +107,9 @@ const DiagnosticResult = ({
         formData.append("resultado", resultadoTexto);
         
         try {
-            await guardarDiagnostico(formData);
-            toast.success("Diagnóstico registrado correctamente");
-            setTimeout(() => navigate("/diagnosticos/lista"), 1000);
+            const response = await guardarDiagnostico(formData);
+            setInterpretacionIA(response.interpretacion);
+            setMostrarModalIA(true);
         } catch (error) {
             toast.error("Error al guardar el diagnóstico");
         }
@@ -126,49 +128,70 @@ const DiagnosticResult = ({
     };
 
     return (
-        <div>
-            <h2>🧪 Diagnóstico Final 🧪</h2>
-            <div className="resultado-box">
-                <h2 className="clase-principal">Diagnóstico de {paciente ? `${paciente.nombre} ${paciente.apellido}` : ""} </h2>
+        <>
+            <div>
+                <h2>🧪 Diagnóstico Final 🧪</h2>
+                <div className="resultado-box">
+                    <h2 className="clase-principal">Diagnóstico de {paciente ? `${paciente.nombre} ${paciente.apellido}` : ""} </h2>
 
-                {Object.entries(resultadoPromedio).map(([clase, porcentaje]) => (
-                <div key={clase} className="clase-item">
-                    <div className="clase-info">
-                    <span className="clase-nombre">{clase}</span>
-                    <span>{porcentaje.toFixed(2)}%</span>
+                    {Object.entries(resultadoPromedio).map(([clase, porcentaje]) => (
+                    <div key={clase} className="clase-item">
+                        <div className="clase-info">
+                        <span className="clase-nombre">{clase}</span>
+                        <span>{porcentaje.toFixed(2)}%</span>
+                        </div>
+                        <div className="progress-bar-container">
+                        <div className="progress-bar-fill" style={{ width: `${porcentaje}%` }} />
+                        </div>
                     </div>
-                    <div className="progress-bar-container">
-                    <div className="progress-bar-fill" style={{ width: `${porcentaje}%` }} />
+                    ))}
+                </div>
+                <div className="acciones-diagnostico">
+                    <textarea
+                        value={descripcion}
+                        onChange={(e) => setDescripcion(e.target.value)}
+                        placeholder="Escriba la descripción del diagnóstico..."
+                        className="descripcion-textarea"
+                        rows={3}
+                    />
+
+                    <div className="botones-diagnostico">
+                        <button
+                        onClick={modalGuardar}
+                        disabled={!descripcion.trim()}
+                        className={`boton-guardar ${!descripcion.trim() ? 'deshabilitado' : ''}`}
+                        >
+                        Guardar Diagnóstico Final
+                        </button>
+                        <button
+                        onClick={modalEliminar}
+                        className="boton-eliminar"
+                        >
+                        Eliminar Diagnóstico
+                        </button>
                     </div>
                 </div>
-                ))}
             </div>
-            <div className="acciones-diagnostico">
-                <textarea
-                    value={descripcion}
-                    onChange={(e) => setDescripcion(e.target.value)}
-                    placeholder="Escriba la descripción del diagnóstico..."
-                    className="descripcion-textarea"
-                    rows={3}
-                />
-
-                <div className="botones-diagnostico">
-                    <button
-                    onClick={modalGuardar}
-                    disabled={!descripcion.trim()}
-                    className={`boton-guardar ${!descripcion.trim() ? 'deshabilitado' : ''}`}
-                    >
-                    Guardar Diagnóstico Final
-                    </button>
-                    <button
-                    onClick={modalEliminar}
-                    className="boton-eliminar"
-                    >
-                    Eliminar Diagnóstico
-                    </button>
+            {mostrarModalIA && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h2 className="titulo-modal">🧠 Interpretación de resultados mediante IA 🧠</h2>
+                        <p style={{ whiteSpace: "pre-line", textAlign: "justify" }}>{interpretacionIA}</p>
+                        <button
+                            onClick={() => {
+                                setMostrarModalIA(false);
+                                toast.success("Diagnóstico registrado correctamente");
+                                setTimeout(() => navigate("/diagnosticos/lista"), 1000);
+                            }} style={{display: "block", margin: "20px auto 0 auto"}}
+            
+                            
+                        >
+                            Finalizar Análisis
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </div>
+            )}
+        </>    
     );
 };
 
