@@ -55,3 +55,8 @@ export const obtenerImagenesDiagnostico = async (diagnosticoId) => {
     throw new Error("Error al obtener imágenes del diagnóstico");
 }
 };
+
+export const descargarDiagnosticoPdf = (diagnosticoId) => {
+  const url = `${API_URL}/descargar-pdf/${diagnosticoId}`;
+  window.open(url, "_blank");
+};
