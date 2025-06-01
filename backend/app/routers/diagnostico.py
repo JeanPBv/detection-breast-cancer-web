@@ -53,6 +53,12 @@ async def analizar_imagen(original_image: UploadFile = File(...), zoom: int = Fo
     save_path = save_upload_file(original_image)
 
     img = Image.open(save_path).convert("RGB")
+    MIN_WIDTH = 700
+    MIN_HEIGHT = 460
+
+    if img.width < MIN_WIDTH or img.height < MIN_HEIGHT:
+        os.remove(save_path)
+        raise HTTPException(status_code=400, detail=f"La imagen tiene baja resolución ({img.width}x{img.height}). Mínimo requerido: {MIN_WIDTH}x{MIN_HEIGHT}.")
 
     if zoom != 100:
         w, h = img.size

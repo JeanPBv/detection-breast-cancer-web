@@ -142,6 +142,9 @@ const UploadImages = ({
     setDragging(false);
   };
 
+  const MIN_WIDTH = 700;
+  const MIN_HEIGHT = 460;
+
   const processFiles = (files) => {
     const validImages = [];
     for (const file of files) {
@@ -166,17 +169,36 @@ const UploadImages = ({
         setShowModal(true);
         continue;
       }
-      validImages.push({ file, preview: URL.createObjectURL(file), analizada: false });
-    }
+      const imgPreviewUrl = URL.createObjectURL(file);
+      const img = new Image();
 
-    if (validImages.length > 0) {
-      setImages((prev) => {
-        const all = [...prev, ...validImages];
-        if (!selectedImage) {
-          setSelectedImage(validImages[0].preview);
+      img.onload = () => {
+        if (img.width < MIN_WIDTH || img.height < MIN_HEIGHT) {
+          setModalTitle('🚨¡Alerta!🚨');
+          setModalMessage(`La imagen "${file.name}" tiene resolución muy baja (${img.width}x${img.height}). Mínimo: ${MIN_WIDTH}x${MIN_HEIGHT}`);
+          setModalType('alert');
+          setShowModal(true);
+          return;
         }
-        return all;
-      });
+
+        const nuevaImagen = { file, preview: imgPreviewUrl, analizada: false };
+        setImages((prev) => {
+          const all = [...prev, nuevaImagen];
+          if (!selectedImage) {
+            setSelectedImage(imgPreviewUrl);
+          }
+          return all;
+        });
+      };
+
+      img.onerror = () => {
+        setModalTitle('🚨¡Alerta!🚨');
+        setModalMessage(`No se pudo leer la imagen "${file.name}".`);
+        setModalType('alert');
+        setShowModal(true);
+      };
+
+      img.src = imgPreviewUrl;
     }
   };
 
