@@ -22,6 +22,7 @@ class Imagen(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     ruta_archivo = Column(String(200))
+    ruta_heatmap = Column(String(200), nullable=True)
     fecha_subida = Column(DateTime, default=datetime.utcnow)
     diagnostico_id = Column(Integer, ForeignKey("diagnosticos.id"))
 

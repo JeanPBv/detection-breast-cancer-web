@@ -11,7 +11,7 @@ function Home() {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1>💻 TALLER INTEGRADOR 💻</h1>
-          <p>¡Sprint 1°!</p>
+          <p>¡Sprint 2°!</p>
         </header>
       </div>
     </div>

@@ -94,6 +94,7 @@ async def analizar_imagen(original_image: UploadFile = File(...), zoom: int = Fo
 
     nueva_imagen = models.Imagen(
         ruta_archivo=save_path,
+        ruta_heatmap=resultado_dict["heatmap_path"],
         fecha_subida=datetime.utcnow(),
         diagnostico_id=diagnostico.id
     )
@@ -273,17 +274,23 @@ def descargar_pdf(diagnostico_id: int, db: Session = Depends(get_db)):
         pdf.ln(3)
 
         for i, img in enumerate(imagenes):
+            img_width = 100
+            x = (pdf.w - img_width) / 2
+
             if os.path.exists(img.ruta_archivo):
                 pdf.set_text_color(100, 100, 100)
                 pdf.cell(0, 8, f"Imagen Analizada N°{i+1}", ln=True)
-                pdf.ln(10)
-
-                img_width = 100
-                x = (pdf.w - img_width) / 2
-
+                pdf.ln(4)
                 pdf.image(img.ruta_archivo, x=x, w=img_width)
                 pdf.ln(20)
 
+            if img.ruta_heatmap and os.path.exists(img.ruta_heatmap):
+                pdf.set_text_color(100, 0, 0)
+                pdf.cell(0, 8, f"Imagen aplicando un mapa de calor N°{i+1}", ln=True)
+                pdf.ln(4)
+                pdf.image(img.ruta_heatmap, x=x, w=img_width)
+                pdf.ln(20)
+    
     os.makedirs("app/pdf_resultados", exist_ok=True)
     pdf_path = f"app/pdf_resultados/diagnostico_{diagnostico_id}.pdf"
     pdf.output(pdf_path)
