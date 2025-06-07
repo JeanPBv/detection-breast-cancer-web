@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/pacientes";
+const API_URL = `${process.env.REACT_APP_BACKEND_URL}/pacientes`;
 
 export const registrarPaciente = async (data) => {
     return await axios.post(API_URL, data);

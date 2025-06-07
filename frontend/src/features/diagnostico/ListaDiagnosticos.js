@@ -135,10 +135,10 @@ const ListaDiagnosticos = () => {
                         {imagenesModal.map((img, idx) => (
                         <img
                             key={idx}
-                            src={`http://localhost:8000${img}`}
+                            src={`${process.env.REACT_APP_BACKEND_URL}${img}`}
                             alt={`Imagen ${idx + 1}`}
                             className="miniatura"
-                            onClick={() => setImagenAmpliada(`http://localhost:8000${img}`)}
+                            onClick={() => setImagenAmpliada(`${process.env.REACT_APP_BACKEND_URL}${img}`)}
                         />
                         ))}
                     </div>
