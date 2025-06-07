@@ -15,6 +15,5 @@ __pycache__/
 
 README.md
 app/images
-app/models
 app/pdf_resultados
 app/test.py
