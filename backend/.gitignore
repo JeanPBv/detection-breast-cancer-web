@@ -14,3 +14,8 @@ __pycache__/
 .env
 
 README.md
+app/database/database.py
+app/images
+app/models
+app/pdf_resultados
+app/test.py

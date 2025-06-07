@@ -1,15 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import PacienteForm from "./features/paciente/PacienteForm";
+import PacienteLista from "./features/paciente/PacienteLista";
+import EditarPaciente from "./features/paciente/EditarPaciente";
+import NewDiagnostico from "./features/diagnostico/NewDiagnostico";
+import ListaDiagnosticos from "./features/diagnostico/ListaDiagnosticos";
+import Home from "./features/Home";
+
+function AppWrapper() {
+  const location = useLocation();
+  const isDiagnosticoRoute = location.pathname.startsWith("/pacientes/diagnostico");
+
+  return (
+    <>
+      <ToastContainer position="top-right" autoClose={2500} />
+
+      {isDiagnosticoRoute ? (
+        <Routes>
+          <Route path="/pacientes/diagnostico/:id" element={<NewDiagnostico />} />
+        </Routes>
+      ) : (
+        <div className="app-container">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/pacientes" element={<PacienteForm />} />
+            <Route path="/pacientes/lista" element={<PacienteLista />} />
+            <Route path="/pacientes/editar/:id" element={<EditarPaciente />} />
+            <Route path="/diagnosticos/lista" element={<ListaDiagnosticos/>}/>
+          </Routes>
+        </div>
+      )}
+    </>
+  );
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>Mi primera app en React 🎉</h1>
-        <p>¡Hola, mundo desde React!</p>
-      </header>
-    </div>
+    <Router>
+      <AppWrapper />
+    </Router>
   );
 }
 
