@@ -7,11 +7,15 @@ import { toast } from "react-toastify";
 
 function PacienteForm() {
     const [formData, setFormData] = useState({ nombre: "", apellido: "", dni: "", edad: "", sexo: "" });
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [mensaje] = useState("");
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
       e.preventDefault();
+      if (isSubmitting) return;
+      setIsSubmitting(true);
+
       try {
           await registrarPaciente(formData);
           toast.success("Paciente registrado correctamente");
@@ -23,6 +27,8 @@ function PacienteForm() {
           } else {
             toast.error("Error al registrar paciente");
           }
+        } finally {
+          setIsSubmitting(false);
         }
     };
     
@@ -35,7 +41,7 @@ function PacienteForm() {
         onSubmit={handleSubmit}
         mensaje={mensaje}
         modo="registro"
-        deshabilitarBoton={!camposCompletos}
+        deshabilitarBoton={!camposCompletos || isSubmitting}
       />
     );
 
