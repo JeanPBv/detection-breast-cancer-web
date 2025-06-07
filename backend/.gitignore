@@ -7,14 +7,10 @@ __pycache__/
 *.log
 *.swp
 
-# Modelos grandes
-*.pth
-
 # Configuración local
 .env
 
 README.md
 app/images
-app/models
 app/pdf_resultados
 app/test.py
